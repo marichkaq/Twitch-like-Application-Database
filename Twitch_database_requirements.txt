@@ -1,0 +1,64 @@
+s28299
+Twitch database requirements
+
+• User - contains information about every user: their username, email, password, registration date, time of last log in, on the Twitch platform each user can be both a streamer, viewer and if assigned - moderator.
+
+connections:
+	user -> stream: user can create multiple streams, but each stream is created by one user.
+	user -> moderator: each user can have 0 or many moderator roles.
+	user -> chat_message: ech user can send many messages, but each message is assigned to only one user.
+	user -> clip: each user can make multiple clips of a stream, but each clip assigned to one user who reccorded it.
+	user -> donation: each user can make many donations, but each donation is assigned to one user who donated.
+	user -> followers: user can be follover and folloved and this is represented by many to many relationship.
+	user -> stream_viewer: stream can have many viewers and viewer can view many streams.
+	user -> notification: user can receive many notifications, but notification is addessed to one certain user.
+
+• Stream - contains information about the stream: it's title, start time, end time, streamer and category.
+
+connections:
+	stream -> stream_moderator: many to many relationship to moderator, since moderator can moderate many streams and 				    stream can be moderated by many moderators.
+	stream -> stream_advertisement: many to many relationship to advertisement, since one ad may be on many streams and 					one stream can contain many ads.
+	stream -> clip: there can be many clips of one stream, but each clip corresponds to one stream.
+	stream -> donation: one stream may receive many donations, but each donation belongs to one stream.
+	stream -> chat_message: each stream may receive many message, but each message is sent to sertain one stream.
+	stream -> stream_viewer: stream can have many viewers and viewer can view many streams.
+
+• Stream_Viewer - a joining table between stream and user (as a viewer), since stream can have many viewers and viewer can view many streams.
+
+• Notification - represents notification for user, it contains information about user to whom notification is addessed, message of notification and time.
+
+• Moderator - containts information about user's role as a moderator, the user, date of being assigned as a maderator, permissions.
+
+connections:
+	moderator -> stream_moderator: to create many to many relationship with stream entity.
+	
+• Stream_Moderator - a joining table between moderator and stream, since moderator can moderate many streams and stream can be moderated by many moderators.
+
+• Chat_message - represents message in a stream chat, contains information about message's content, time it was sent, stream it was sent in and a user - sender of a message.
+
+• Donation - represents a donation that can be made on each stream, contains information about amount of donation, time it was sent, stream it was sent on, and a user - sender.
+
+• Category - represents a category of a stream, contains a name of the category.
+
+connections:
+	category -> stream: each stream in one the most suitable for it category, but each category contains many streams.
+ 
+• Clip - represents a clip of a stream that can be made by any user - viewer of a stream, it is then saved to streamer's page. Contains information about clip's title, start time of the time of stream, end time of the time of stream, user that created it and stream that was captured, from it we can obtain user - streamer to save the video to their page.
+
+• Advertisement - represents an advertisement that can be on some of the streams, contains information about the content of advertisement and the name of a sponsor.
+
+connections:
+	advertisement -> stream_advertisement: to create many to many relationship between advertisement and stream.
+
+• Stream_Advertisement - a joining table between advertisement and stream, since one ad may be on many streams and one stream can contain many ads, contains information about start time, end time of ad in a stream.
+
+• Followers - a joining table between user and itself to create many to many relationship, since user can follow many other users and be followed by many other users.
+
+_____________________________________________________________________________________________________________________________
+
+5 sample functionalities of database:
+• Top streamers by followers
+• Popularity of streams by category
+• Most active users in stream chat
+• Assign user to a moderator role
+• Total donations received by a streamer
